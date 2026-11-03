@@ -1,4 +1,0 @@
-id_controle,date_execution,source,lignes_lues,doublons,non_pertinentes,rejets,lignes_chargees
-1,2026-11-03 14:04:48,flux_tresorerie_FR.csv,4406,22,13,9,4362
-2,2026-11-03 14:04:48,flux_tresorerie_CA.csv,4494,22,13,9,4450
-3,2026-11-03 14:04:48,flux_tresorerie_CI.csv,4374,22,13,9,4330

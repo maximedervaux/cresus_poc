@@ -6,6 +6,8 @@ sur 3 filiales : France (EUR), Canada (CAD), Côte d'Ivoire (XAF).
 
 ## Architecture
 
+Diagrammes détaillés (architecture, ETL, modèle de données, prédiction, stress, Power BI) : [docs/DIAGRAMMES.md](docs/DIAGRAMMES.md).
+
 ```
 data/sources/                     extract_marche.py         -> taux_change.csv, valeur_usd.csv (API BCE réelle),
   flux_tresorerie_FR|CA|CI.csv                                  taux_directeurs.csv
@@ -16,7 +18,7 @@ MySQL cresus_poc                  zone REPORTING : dim_filiale, dim_devise, dim_
         │                                          fait_flux_tresorerie, fait_taux
         ▼  prediction.py          zone PREDICTIVE: fait_prevision (backtest + production), fait_prevision_taux,
         ▼  stress.py                               perf_modele, fait_scenario_stress
-        ▼  restitution.py         vues v_* pour Power BI + exports/ (CSV)
+        ▼  restitution.py         vues v_* pour Power BI
 Power BI                          powerbi/GUIDE_POWERBI.md
 ```
 

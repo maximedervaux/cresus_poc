@@ -5,7 +5,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 SOURCES_DIR = BASE_DIR / "data" / "sources"
-EXPORT_DIR = BASE_DIR / "exports"
 SQL_DIR = BASE_DIR / "sql"
 
 # Connexion MySQL (surchargeable : export CRESUS_DB_SERVER="mysql+pymysql://user:mdp@hote:3306")

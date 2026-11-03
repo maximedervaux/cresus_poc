@@ -4,7 +4,7 @@
 
 ## 1. Connexion aux données
 
-**Option A : connexion directe MySQL (MOE §2.1.4)**
+**Connexion directe MySQL (MOE §2.1.4)**
 1. Installer **MySQL Connector/NET** (requis par Power BI pour MySQL).
 2. Power BI Desktop → *Obtenir les données* → *Base de données MySQL*.
 3. Serveur : `<hôte>:3306`, base : `cresus_poc`. Mode **Import**.
@@ -13,10 +13,6 @@
 > Si MySQL tourne sur le Mac et Power BI dans une VM, il faut ouvrir MySQL au réseau
 > (`bind-address`) et créer un utilisateur dédié en lecture seule :
 > `CREATE USER 'powerbi'@'%' IDENTIFIED BY '...'; GRANT SELECT ON cresus_poc.* TO 'powerbi'@'%';`
-
-**Option B : fichiers CSV** : *Obtenir les données → Dossier* → `exports/`
-(les fichiers sont régénérés à chaque exécution de `run_pipeline.py`).
-Dans Power Query, régler la culture sur **Anglais (États-Unis)**, car le séparateur décimal est le point.
 
 ## 2. Modèle (vue Modèle)
 
