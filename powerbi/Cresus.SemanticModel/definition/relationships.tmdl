@@ -1,0 +1,92 @@
+relationship db53cb54-e714-56e2-8282-cf6adfffc3f5
+	fromColumn: fait_flux_tresorerie.date_id
+	toColumn: dim_calendrier.date_id
+
+relationship 56bdbafa-7bd9-55ef-9ba1-93e1f920a0ab
+	fromColumn: fait_flux_tresorerie.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship 8a20f126-4849-5678-a55b-272ab76d36eb
+	fromColumn: fait_flux_tresorerie.code_devise
+	toColumn: dim_devise.code_devise
+
+relationship 3176d2ca-b354-50c5-a55a-88d929bd11dc
+	fromColumn: fait_flux_tresorerie.id_type_flux
+	toColumn: dim_type_flux.id_type_flux
+
+relationship c16d913d-2609-52c9-b79a-032ebdb34dda
+	fromColumn: fait_taux.date_id
+	toColumn: dim_calendrier.date_id
+
+relationship 8a423038-4cab-5036-b331-6cc8c69c0cfa
+	fromColumn: fait_taux.code_devise
+	toColumn: dim_devise.code_devise
+
+relationship 825d53bc-14c5-5d12-ab15-a7ffd2493f58
+	fromColumn: fait_prevision.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship c0eac6ce-8b6b-5fc8-bd42-3674d339a726
+	fromColumn: fait_prevision_taux.code_devise
+	toColumn: dim_devise.code_devise
+
+relationship 1a2787ed-8ce3-51f1-bf63-bcc4f8a153da
+	fromColumn: fait_scenario_stress.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship a1be0ec7-acd4-5fad-87fe-0f69239c1a51
+	fromColumn: perf_modele.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship 2f8dcbc7-a501-5a6e-8eb1-197e64a7d262
+	fromColumn: v_position_realisee.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship 4e2d5010-c246-57ec-99b5-021954d2504e
+	fromColumn: v_position_projetee.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship 0af3a601-4632-53f4-915d-070d3902a33c
+	fromColumn: v_backtest.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship f92a458e-95a6-5f12-8ff5-30fc762de060
+	fromColumn: v_stress_synthese.id_filiale
+	toColumn: dim_filiale.id_filiale
+
+relationship b6591c5c-f61a-5ff9-9165-c3d48c74f69d
+	fromColumn: v_projection_taux.code_devise
+	toColumn: dim_devise.code_devise
+
+relationship 236eebbf-7006-501c-b9ba-f9ea22a661d3
+	fromColumn: fait_prevision.date_cible
+	toColumn: dim_calendrier.date
+
+relationship 4bd6add2-2592-5e72-b9f7-cd31b45952b5
+	fromColumn: fait_prevision_taux.date_cible
+	toColumn: dim_calendrier.date
+
+relationship cc500018-fc8e-5626-9cc9-308064e1b27e
+	fromColumn: fait_scenario_stress.date_cible
+	toColumn: dim_calendrier.date
+
+relationship 50e69647-7926-57e3-97a3-dbe92898d445
+	fromColumn: v_position_realisee.date
+	toColumn: dim_calendrier.date
+
+relationship af126446-2bc9-5805-8e21-699dfb251e53
+	fromColumn: v_position_projetee.date
+	toColumn: dim_calendrier.date
+
+relationship 061def96-cc00-5cb7-b0ab-a85d83d5cee6
+	fromColumn: v_backtest.date
+	toColumn: dim_calendrier.date
+
+relationship de21e37d-5b2a-5905-83c0-a9fdf8cfca88
+	fromColumn: fait_scenario_stress.libelle_scenario
+	toColumn: _Scenarios.libelle_scenario
+
+relationship b1faf604-d20c-52ad-a7a6-b3db0a0e7b10
+	fromColumn: v_stress_synthese.libelle_scenario
+	toColumn: _Scenarios.libelle_scenario
+

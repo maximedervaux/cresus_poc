@@ -1,0 +1,70 @@
+table fait_prevision_taux
+	lineageTag: 59d57ac6-de9a-4fa5-887d-84c953ecd8c3
+
+	column id_prevision_taux
+		dataType: int64
+		lineageTag: eda17895-8ca1-4455-a145-d5895b45617f
+		summarizeBy: none
+		sourceColumn: id_prevision_taux
+
+	column date_generation
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 5cdc67d5-bdcf-4611-ab3e-0651d9d6c42b
+		summarizeBy: none
+		sourceColumn: date_generation
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column date_cible
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: fe3c30be-8873-4d2c-a899-ab5f83ab57dd
+		summarizeBy: none
+		sourceColumn: date_cible
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column code_devise
+		dataType: string
+		lineageTag: 6610759b-09ae-4ccd-baf4-084a1617fec0
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column modele
+		dataType: string
+		lineageTag: 39ea2227-50b2-4c3c-a3d5-4ac1b8ddfa9c
+		summarizeBy: none
+		sourceColumn: modele
+
+	column taux_prevu
+		dataType: double
+		lineageTag: f3f15a70-9fb0-40b7-98c3-0b40423d84f9
+		summarizeBy: none
+		sourceColumn: taux_prevu
+
+	column borne_basse
+		dataType: double
+		lineageTag: d31b3cb0-3db9-4f12-b4c9-e4ee1b44e608
+		summarizeBy: none
+		sourceColumn: borne_basse
+
+	column borne_haute
+		dataType: double
+		lineageTag: 5186bd5b-47a4-48eb-935d-50c3ef41ab60
+		summarizeBy: none
+		sourceColumn: borne_haute
+
+	partition fait_prevision_taux = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\fait_prevision_taux.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `fait_prevision_taux`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_prevision_taux", Int64.Type}, {"date_generation", type date}, {"date_cible", type date}, {"code_devise", type text}, {"modele", type text}, {"taux_prevu", type number}, {"borne_basse", type number}, {"borne_haute", type number}}, "en-US")
+				in
+				    Types
+

@@ -1,0 +1,65 @@
+table etl_controle_qualite
+	lineageTag: 6040eb51-786b-4921-9cb2-0d6477a28048
+
+	column id_controle
+		dataType: int64
+		lineageTag: 846897ae-5c67-403b-836a-73426b96d6d8
+		summarizeBy: none
+		sourceColumn: id_controle
+
+	column date_execution
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 9b771baf-6c17-4240-ba4a-3cf80eb1aca6
+		summarizeBy: none
+		sourceColumn: date_execution
+
+	column source
+		dataType: string
+		lineageTag: 31fe9c0d-843d-43d9-a1b5-3d18867b6261
+		summarizeBy: none
+		sourceColumn: source
+
+	column lignes_lues
+		dataType: int64
+		lineageTag: 78a22a83-c6c2-4a56-ba43-6a876e2b65cb
+		summarizeBy: none
+		sourceColumn: lignes_lues
+
+	column doublons
+		dataType: int64
+		lineageTag: f86bf199-b7fd-4f56-828f-98cd5e95ce82
+		summarizeBy: none
+		sourceColumn: doublons
+
+	column non_pertinentes
+		dataType: int64
+		lineageTag: ed24b12c-8236-46a5-a172-527cb5836220
+		summarizeBy: none
+		sourceColumn: non_pertinentes
+
+	column rejets
+		dataType: int64
+		lineageTag: 7bd9ca26-4fda-4ebc-baf2-5883261a7554
+		summarizeBy: none
+		sourceColumn: rejets
+
+	column lignes_chargees
+		dataType: int64
+		lineageTag: 410e19ef-2e75-47c3-b8a4-90b2dfcd2eb7
+		summarizeBy: none
+		sourceColumn: lignes_chargees
+
+	partition etl_controle_qualite = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\etl_controle_qualite.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `etl_controle_qualite`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_controle", Int64.Type}, {"date_execution", type datetime}, {"source", type text}, {"lignes_lues", Int64.Type}, {"doublons", Int64.Type}, {"non_pertinentes", Int64.Type}, {"rejets", Int64.Type}, {"lignes_chargees", Int64.Type}}, "en-US")
+				in
+				    Types
+

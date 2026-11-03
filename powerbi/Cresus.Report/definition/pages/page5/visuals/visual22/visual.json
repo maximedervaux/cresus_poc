@@ -1,0 +1,157 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "visual22",
+  "position": {
+    "x": 24,
+    "y": 40,
+    "width": 1226,
+    "height": 760,
+    "z": 22,
+    "tabOrder": 22
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "id_controle"
+                }
+              },
+              "queryRef": "etl_controle_qualite.id_controle",
+              "nativeQueryRef": "id_controle"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "date_execution"
+                }
+              },
+              "queryRef": "etl_controle_qualite.date_execution",
+              "nativeQueryRef": "date_execution"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "source"
+                }
+              },
+              "queryRef": "etl_controle_qualite.source",
+              "nativeQueryRef": "source"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "lignes_lues"
+                }
+              },
+              "queryRef": "etl_controle_qualite.lignes_lues",
+              "nativeQueryRef": "lignes_lues"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "doublons"
+                }
+              },
+              "queryRef": "etl_controle_qualite.doublons",
+              "nativeQueryRef": "doublons"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "non_pertinentes"
+                }
+              },
+              "queryRef": "etl_controle_qualite.non_pertinentes",
+              "nativeQueryRef": "non_pertinentes"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "rejets"
+                }
+              },
+              "queryRef": "etl_controle_qualite.rejets",
+              "nativeQueryRef": "rejets"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "etl_controle_qualite"
+                    }
+                  },
+                  "Property": "lignes_chargees"
+                }
+              },
+              "queryRef": "etl_controle_qualite.lignes_chargees",
+              "nativeQueryRef": "lignes_chargees"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Contrôles ETL par source et date'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

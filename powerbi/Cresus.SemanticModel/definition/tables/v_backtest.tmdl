@@ -1,0 +1,55 @@
+table v_backtest
+	lineageTag: 5ee3f39a-d01a-4144-9823-3304108ca8fb
+
+	column id_filiale
+		dataType: int64
+		lineageTag: 4a6658fe-c436-41d7-8d51-c3b12c3c7671
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column nom_filiale
+		dataType: string
+		lineageTag: 2e1b0885-40ea-41ba-9c97-0342475eefcf
+		summarizeBy: none
+		sourceColumn: nom_filiale
+
+	column date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: dcd89936-d4be-4d8f-bc6a-f32769fbfa30
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column modele
+		dataType: string
+		lineageTag: d76d1bdb-a495-4a71-8293-6b9cbc448904
+		summarizeBy: none
+		sourceColumn: modele
+
+	column flux_prevu
+		dataType: decimal
+		lineageTag: 3865564c-9bf6-4011-a50c-7b753059c7ee
+		summarizeBy: none
+		sourceColumn: flux_prevu
+
+	column flux_reel
+		dataType: decimal
+		lineageTag: 58680c48-698d-4c4f-ae75-0c41ff6d1330
+		summarizeBy: none
+		sourceColumn: flux_reel
+
+	partition v_backtest = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\v_backtest.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `v_backtest`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_filiale", Int64.Type}, {"nom_filiale", type text}, {"date", type date}, {"modele", type text}, {"flux_prevu", Currency.Type}, {"flux_reel", Currency.Type}}, "en-US")
+				in
+				    Types
+

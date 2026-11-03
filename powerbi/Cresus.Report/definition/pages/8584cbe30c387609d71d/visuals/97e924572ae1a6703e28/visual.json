@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "97e924572ae1a6703e28",
+  "position": {
+    "x": 533.10641719291777,
+    "y": 55.574800247910346,
+    "z": 1,
+    "height": 224.35752692674919,
+    "width": 1099.1460493475602,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Borne basse taux"
+                }
+              },
+              "queryRef": "_Mesures.Borne basse taux",
+              "nativeQueryRef": "Borne basse taux"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Borne haute taux"
+                }
+              },
+              "queryRef": "_Mesures.Borne haute taux",
+              "nativeQueryRef": "Borne haute taux"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Mesures"
+                  }
+                },
+                "Property": "Borne basse taux"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "eeeab450926711472d36",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Mesures"
+              }
+            },
+            "Property": "Borne basse taux"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "5666b81c0d182c221935",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Mesures"
+              }
+            },
+            "Property": "Borne haute taux"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

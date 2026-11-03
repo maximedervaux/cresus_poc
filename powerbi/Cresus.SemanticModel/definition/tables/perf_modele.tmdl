@@ -1,0 +1,67 @@
+table perf_modele
+	lineageTag: 6a694e62-3f51-4820-9787-6592e4f36bfa
+
+	column id_filiale
+		dataType: int64
+		lineageTag: 451a1f27-3506-49e6-b1c8-74b2525bf690
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column modele
+		dataType: string
+		lineageTag: 3e174a76-cb40-47e2-a975-a2b838316a7c
+		summarizeBy: none
+		sourceColumn: modele
+
+	column date_generation
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: afca7bef-4a61-4510-9278-4e21bf3a9464
+		summarizeBy: none
+		sourceColumn: date_generation
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column nb_jours
+		dataType: int64
+		lineageTag: 9d5b711a-e0ed-49d1-b219-fc2f01e14f2a
+		summarizeBy: none
+		sourceColumn: nb_jours
+
+	column mae
+		dataType: decimal
+		lineageTag: e5a1283a-98ce-452e-bd80-dbcae6e669c0
+		summarizeBy: none
+		sourceColumn: mae
+
+	column wape_pct
+		dataType: double
+		lineageTag: d79ee7f8-700a-4c5d-a98f-e3888c6fe85f
+		summarizeBy: none
+		sourceColumn: wape_pct
+
+	column ecart_position_j30
+		dataType: decimal
+		lineageTag: 54c6bc14-7e8b-4f2d-a478-6eff1f471ba9
+		summarizeBy: none
+		sourceColumn: ecart_position_j30
+
+	column retenu
+		dataType: int64
+		lineageTag: b85dea90-b646-41c8-a356-b82d2ee3f09a
+		summarizeBy: none
+		sourceColumn: retenu
+
+	partition perf_modele = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\perf_modele.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `perf_modele`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_filiale", Int64.Type}, {"modele", type text}, {"date_generation", type date}, {"nb_jours", Int64.Type}, {"mae", Currency.Type}, {"wape_pct", type number}, {"ecart_position_j30", Currency.Type}, {"retenu", Int64.Type}}, "en-US")
+				in
+				    Types
+

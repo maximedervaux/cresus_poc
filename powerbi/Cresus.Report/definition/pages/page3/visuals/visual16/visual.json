@@ -1,0 +1,157 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "visual16",
+  "position": {
+    "x": 24,
+    "y": 500,
+    "width": 1226,
+    "height": 340,
+    "z": 16,
+    "tabOrder": 16
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "id_filiale"
+                }
+              },
+              "queryRef": "perf_modele.id_filiale",
+              "nativeQueryRef": "id_filiale"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "modele"
+                }
+              },
+              "queryRef": "perf_modele.modele",
+              "nativeQueryRef": "modele"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "date_generation"
+                }
+              },
+              "queryRef": "perf_modele.date_generation",
+              "nativeQueryRef": "date_generation"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "nb_jours"
+                }
+              },
+              "queryRef": "perf_modele.nb_jours",
+              "nativeQueryRef": "nb_jours"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "mae"
+                }
+              },
+              "queryRef": "perf_modele.mae",
+              "nativeQueryRef": "mae"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "wape_pct"
+                }
+              },
+              "queryRef": "perf_modele.wape_pct",
+              "nativeQueryRef": "wape_pct"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "ecart_position_j30"
+                }
+              },
+              "queryRef": "perf_modele.ecart_position_j30",
+              "nativeQueryRef": "ecart_position_j30"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "perf_modele"
+                    }
+                  },
+                  "Property": "retenu"
+                }
+              },
+              "queryRef": "perf_modele.retenu",
+              "nativeQueryRef": "retenu"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Performances — montants en devise locale ; WAPE en points %'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

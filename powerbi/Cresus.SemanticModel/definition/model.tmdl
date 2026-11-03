@@ -1,0 +1,33 @@
+model Model
+	culture: fr-FR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["dim_calendrier","dim_devise","dim_filiale","dim_type_flux","etl_controle_qualite","fait_flux_tresorerie","fait_prevision","fait_prevision_taux","fait_scenario_stress","fait_taux","perf_modele","v_backtest","v_position_projetee","v_position_realisee","v_projection_taux","v_stress_synthese","_Mesures","_Scenarios","ServeurMySQL","BaseMySQL","ModeSource","DossierExports"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_calendrier
+ref table dim_devise
+ref table dim_filiale
+ref table dim_type_flux
+ref table etl_controle_qualite
+ref table fait_flux_tresorerie
+ref table fait_prevision
+ref table fait_prevision_taux
+ref table fait_scenario_stress
+ref table fait_taux
+ref table perf_modele
+ref table v_backtest
+ref table v_position_projetee
+ref table v_position_realisee
+ref table v_projection_taux
+ref table v_stress_synthese
+ref table _Mesures
+ref table _Scenarios
+

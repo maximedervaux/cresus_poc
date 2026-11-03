@@ -1,0 +1,206 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "visual7",
+  "position": {
+    "x": 39.008533116619262,
+    "y": 709.95530272247061,
+    "z": 7,
+    "height": 159.1548151158066,
+    "width": 1226.4282811865096,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_filiale"
+                    }
+                  },
+                  "Property": "nom_filiale"
+                }
+              },
+              "queryRef": "dim_filiale.nom_filiale",
+              "nativeQueryRef": "nom_filiale"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_filiale"
+                    }
+                  },
+                  "Property": "devise_principale"
+                }
+              },
+              "queryRef": "dim_filiale.devise_principale",
+              "nativeQueryRef": "devise_principale"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Position actuelle USD"
+                }
+              },
+              "queryRef": "_Mesures.Position actuelle USD",
+              "nativeQueryRef": "Position actuelle USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Seuil actuel USD"
+                }
+              },
+              "queryRef": "_Mesures.Seuil actuel USD",
+              "nativeQueryRef": "Seuil actuel USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Écart au seuil USD"
+                }
+              },
+              "queryRef": "_Mesures.Écart au seuil USD",
+              "nativeQueryRef": "Écart au seuil USD"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Mesures"
+                  }
+                },
+                "Property": "Position actuelle USD"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Stocks par filiale — écart négatif = ALERTE'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "e3631480c3b069be7ebe",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_filiale"
+              }
+            },
+            "Property": "nom_filiale"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "066d8fe191d6a33aec5a",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_filiale"
+              }
+            },
+            "Property": "devise_principale"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "81ed9c73914c0476d329",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Mesures"
+              }
+            },
+            "Property": "Position actuelle USD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e44bf16f294d7848c260",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Mesures"
+              }
+            },
+            "Property": "Seuil actuel USD"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "7ed1657ea51b0927d8a4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Mesures"
+              }
+            },
+            "Property": "Écart au seuil USD"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

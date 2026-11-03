@@ -1,0 +1,82 @@
+table fait_prevision
+	lineageTag: c281045c-8f85-4855-85d1-ff703c3128f4
+
+	column id_prevision
+		dataType: int64
+		lineageTag: 5096d012-08cd-41ad-8e10-ff9fabdb6f34
+		summarizeBy: none
+		sourceColumn: id_prevision
+
+	column type_run
+		dataType: string
+		lineageTag: 0673687e-f931-4a2e-a1de-0b13e9e221a1
+		summarizeBy: none
+		sourceColumn: type_run
+
+	column date_generation
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 35ae1b31-76c0-40dc-a62d-f8043a665ba0
+		summarizeBy: none
+		sourceColumn: date_generation
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column date_cible
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: bf56ff33-a163-46d6-a620-d07051587815
+		summarizeBy: none
+		sourceColumn: date_cible
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id_filiale
+		dataType: int64
+		lineageTag: abe4cebe-ca8f-4eb4-bb02-a624627432a1
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column code_devise
+		dataType: string
+		lineageTag: 2414f370-fc3c-4b6e-b40c-80ff5da3f4e5
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column modele
+		dataType: string
+		lineageTag: 08842e37-c570-4776-9fec-33ebfa7037c9
+		summarizeBy: none
+		sourceColumn: modele
+
+	column montant_prevu
+		dataType: decimal
+		lineageTag: 1f162924-6eed-4cdb-93e9-88ae88d43c7f
+		summarizeBy: none
+		sourceColumn: montant_prevu
+
+	column borne_basse
+		dataType: decimal
+		lineageTag: 3d02307a-d4f6-4f8e-8720-0e20d6f0aaf0
+		summarizeBy: none
+		sourceColumn: borne_basse
+
+	column borne_haute
+		dataType: decimal
+		lineageTag: ba67b0b7-9070-4b35-887f-c86a17dd5f58
+		summarizeBy: none
+		sourceColumn: borne_haute
+
+	partition fait_prevision = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\fait_prevision.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `fait_prevision`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_prevision", Int64.Type}, {"type_run", type text}, {"date_generation", type date}, {"date_cible", type date}, {"id_filiale", Int64.Type}, {"code_devise", type text}, {"modele", type text}, {"montant_prevu", Currency.Type}, {"borne_basse", Currency.Type}, {"borne_haute", Currency.Type}}, "en-US")
+				in
+				    Types
+
