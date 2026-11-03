@@ -73,8 +73,8 @@ illustre la faible prévisibilité du change à 30 jours : à utiliser comme sig
 
 - **Flux des filiales simulés** (générateur à graine fixe, reproductible) : les gains mesurés valident la
   chaîne technique, pas une performance réelle. Les **taux de change sont réels** (BCE). Les taux directeurs
-  sont saisis manuellement à titre indicatif.
+  EUR et CAD sont réels (API BCE et Banque du Canada) ; ceux de la BEAC (XAF), sans API, sont saisis manuellement.
 - Données externes en différé (batch quotidien), pas en temps réel (§2.1.5).
 - Règles de stress volontairement simples et documentées dans `stress.py` (taux d'indexation, fenêtre de 90 jours).
-- En cible : Data Warehouse / Data Lake, orchestrateur (Airflow…), API des banques centrales, toutes les
+- En cible : Data Warehouse / Data Lake, orchestrateur (Airflow…), toutes les
   filiales et devises, gouvernance et traçabilité des modèles (exigence réglementaire).
