@@ -1,0 +1,75 @@
+table dim_calendrier
+	lineageTag: 8e21d916-c0bb-4390-9b6d-10e41d4db8b4
+	dataCategory: Time
+
+	column date_id
+		dataType: int64
+		lineageTag: 2e1aa756-1b27-4ec7-ade5-f87ef9a79c86
+		summarizeBy: none
+		sourceColumn: date_id
+
+	column date
+		dataType: dateTime
+		isKey
+		formatString: dd/MM/yyyy
+		lineageTag: c0448f4c-f562-47eb-8a5c-447101797852
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column jour
+		dataType: int64
+		lineageTag: fdb8f92b-a985-42ab-a18a-b6a3f39b104b
+		summarizeBy: none
+		sourceColumn: jour
+
+	column mois
+		dataType: int64
+		lineageTag: 6502d4fc-fceb-4c97-8b40-43ab99e0bf18
+		summarizeBy: none
+		sourceColumn: mois
+
+	column annee
+		dataType: int64
+		lineageTag: 610f5c44-e13c-4309-bfc2-93dce6c6c043
+		summarizeBy: none
+		sourceColumn: annee
+
+	column jour_semaine
+		dataType: int64
+		lineageTag: ae7d1af1-ee51-4477-9594-68f1f879236e
+		summarizeBy: none
+		sourceColumn: jour_semaine
+
+	column ouvre_fra
+		dataType: int64
+		lineageTag: 125e64d3-16bd-4b91-9deb-864234039f3e
+		summarizeBy: none
+		sourceColumn: ouvre_fra
+
+	column ouvre_can
+		dataType: int64
+		lineageTag: 0c50f01a-cbee-4ca9-aaaa-4a3e0a90fc3c
+		summarizeBy: none
+		sourceColumn: ouvre_can
+
+	column ouvre_civ
+		dataType: int64
+		lineageTag: 1496678d-f0e7-4c05-88aa-c5b6bb5bd586
+		summarizeBy: none
+		sourceColumn: ouvre_civ
+
+	partition dim_calendrier = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\dim_calendrier.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `dim_calendrier`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"date_id", Int64.Type}, {"date", type date}, {"jour", Int64.Type}, {"mois", Int64.Type}, {"annee", Int64.Type}, {"jour_semaine", Int64.Type}, {"ouvre_fra", Int64.Type}, {"ouvre_can", Int64.Type}, {"ouvre_civ", Int64.Type}}, "en-US")
+				in
+				    Types
+

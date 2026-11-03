@@ -1,0 +1,13 @@
+table _Scenarios
+	lineageTag: 96422101-7839-4c08-8c9a-3000b92c304d
+
+	column libelle_scenario
+		dataType: string
+		lineageTag: c6aaa1b6-2901-4585-ba5b-ba0ad015f5bf
+		summarizeBy: none
+		sourceColumn: libelle_scenario
+
+	partition _Scenarios = m
+		mode: import
+		source = Table.Distinct(Table.SelectColumns(fait_scenario_stress, {"libelle_scenario"}))
+

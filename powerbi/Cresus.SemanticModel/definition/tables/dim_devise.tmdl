@@ -1,0 +1,28 @@
+table dim_devise
+	lineageTag: 224bda44-e89f-48ce-9c3a-2b8c9ec657ca
+
+	column code_devise
+		dataType: string
+		lineageTag: 9d97fcee-5cbe-4f38-a41c-0ef95814f328
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column libelle_devise
+		dataType: string
+		lineageTag: da6d229f-4f77-4bb9-ac5a-4961e0ab523e
+		summarizeBy: none
+		sourceColumn: libelle_devise
+
+	partition dim_devise = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\dim_devise.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `dim_devise`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"code_devise", type text}, {"libelle_devise", type text}}, "en-US")
+				in
+				    Types
+

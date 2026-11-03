@@ -1,4 +1,4 @@
-"""Scénarios de stress (MOE §2.2.4) appliqués à la prévision de production.
+"""Scénarios de stress appliqués à la prévision de production.
 
 Pour chaque filiale, on part de la prévision du modèle retenu au backtest et de la
 dernière position réalisée, puis on applique un choc paramétré :

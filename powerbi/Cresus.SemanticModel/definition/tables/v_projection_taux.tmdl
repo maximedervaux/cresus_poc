@@ -1,0 +1,70 @@
+table v_projection_taux
+	lineageTag: d8438cbe-edbc-4ab3-a865-63d247f1d04e
+
+	column code_devise
+		dataType: string
+		lineageTag: 6f50987e-fff2-4175-a8e5-7f91f7eacebe
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column libelle_devise
+		dataType: string
+		lineageTag: f3ec774a-eaa5-44df-af69-da3833faa3f1
+		summarizeBy: none
+		sourceColumn: libelle_devise
+
+	column modele
+		dataType: string
+		lineageTag: fbda7c08-df2c-4018-aa67-b844c9112272
+		summarizeBy: none
+		sourceColumn: modele
+
+	column taux_spot
+		dataType: double
+		lineageTag: e9fcab8e-7f45-4113-8187-6049c7e685a4
+		summarizeBy: none
+		sourceColumn: taux_spot
+
+	column taux_prevu_j30
+		dataType: double
+		lineageTag: 361ddeaf-0e0d-451b-9316-503de9179ae1
+		summarizeBy: none
+		sourceColumn: taux_prevu_j30
+
+	column borne_basse
+		dataType: double
+		lineageTag: c1432645-2093-4260-ba3c-6d68ac8ca3b9
+		summarizeBy: none
+		sourceColumn: borne_basse
+
+	column borne_haute
+		dataType: double
+		lineageTag: 818856e2-397e-44bc-bb88-e4c9a2a2634d
+		summarizeBy: none
+		sourceColumn: borne_haute
+
+	column variation_pct
+		dataType: double
+		lineageTag: 8b45eb1e-94c7-4a6e-bf0f-e207290a5f67
+		summarizeBy: none
+		sourceColumn: variation_pct
+
+	column indicateur
+		dataType: string
+		lineageTag: bc55f891-5441-4ffb-b42e-6c2503334680
+		summarizeBy: none
+		sourceColumn: indicateur
+
+	partition v_projection_taux = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\v_projection_taux.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `v_projection_taux`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"code_devise", type text}, {"libelle_devise", type text}, {"modele", type text}, {"taux_spot", type number}, {"taux_prevu_j30", type number}, {"borne_basse", type number}, {"borne_haute", type number}, {"variation_pct", type number}, {"indicateur", type text}}, "en-US")
+				in
+				    Types
+

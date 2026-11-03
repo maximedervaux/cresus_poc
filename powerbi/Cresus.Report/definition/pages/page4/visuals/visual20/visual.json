@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "visual20",
+  "position": {
+    "x": 830,
+    "y": 130,
+    "z": 20,
+    "height": 350,
+    "width": 420,
+    "tabOrder": 20
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_filiale"
+                    }
+                  },
+                  "Property": "nom_filiale"
+                }
+              },
+              "queryRef": "dim_filiale.nom_filiale",
+              "nativeQueryRef": "nom_filiale",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Impact stress USD"
+                }
+              },
+              "queryRef": "_Mesures.Impact stress USD",
+              "nativeQueryRef": "Impact stress USD"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Impact J+30 — USD'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

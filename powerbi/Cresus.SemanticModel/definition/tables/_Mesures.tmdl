@@ -1,0 +1,93 @@
+table _Mesures
+	lineageTag: 5acfb018-f20c-48c2-9215-79f84714d4e4
+
+	measure 'Position actuelle USD' = VAR d = MAX(v_position_realisee[date]) RETURN CALCULATE(SUM(v_position_realisee[position_usd]), v_position_realisee[date] = d)
+		formatString: #,0.0,," M USD"
+		lineageTag: 3d372081-f319-4431-a245-9988a5b2fa0a
+
+	measure 'Devises en alerte' = VAR d = MAX(v_position_realisee[date]) RETURN CALCULATE(COUNTROWS(v_position_realisee), v_position_realisee[date] = d, v_position_realisee[statut_liquidite] = "ALERTE")
+		formatString: 0
+		lineageTag: 28789408-2936-42ef-b39e-720f481eb47c
+
+	measure 'Position J+30 USD (modèle retenu)' = VAR d = MAX(v_position_projetee[date]) RETURN CALCULATE(SUM(v_position_projetee[position_projetee_usd]), v_position_projetee[date] = d, v_position_projetee[modele_retenu] = 1)
+		formatString: #,0.0,," M USD"
+		lineageTag: 32be1642-d3bb-4120-b40d-0efa5d1275db
+
+	measure 'Flux net réalisé USD' = CALCULATE(SUMX(fait_flux_tresorerie, IF(RELATED(dim_type_flux[sens]) = "ENCAISSEMENT", 1, -1) * fait_flux_tresorerie[montant_usd]), fait_flux_tresorerie[statut] = "REALISE")
+		formatString: #,0.0,," M USD"
+		lineageTag: a7c4b017-8959-4a86-985a-6fc1ce2aa7e1
+
+	measure 'MAE backtest' = IF(HASONEVALUE(dim_filiale[id_filiale]), AVERAGEX(v_backtest, ABS(v_backtest[flux_prevu] - v_backtest[flux_reel])))
+		formatString: #,0.00
+		lineageTag: 7738fcc4-5f27-4fea-a9fe-c909cec241c7
+
+	measure 'Gain vs prévision manuelle %' = VAR m = CALCULATE(AVERAGE(perf_modele[mae]), perf_modele[retenu] = 1) VAR b = CALCULATE(AVERAGE(perf_modele[mae]), perf_modele[modele] = "MANUEL") RETURN IF(HASONEVALUE(dim_filiale[id_filiale]), DIVIDE(b-m,b))
+		formatString: 0.0%
+		lineageTag: 80279f5e-4dc2-4e2e-91a7-85b73323ef48
+
+	measure 'Impact stress USD' = IF(HASONEVALUE(_Scenarios[libelle_scenario]), SUM(v_stress_synthese[impact_usd]))
+		formatString: #,0.0,," M USD"
+		lineageTag: 496ebabd-b686-4469-8476-b0857f5bfceb
+
+	measure 'Jours sous seuil (stress)' = IF(HASONEVALUE(_Scenarios[libelle_scenario]), SUM(v_stress_synthese[nb_jours_sous_seuil]))
+		formatString: 0
+		lineageTag: f568eae8-f11d-40b7-bc75-02f47fc229f3
+
+	measure 'Seuil actuel USD' = VAR d = MAX(v_position_realisee[date]) RETURN CALCULATE(SUM(v_position_realisee[seuil_alerte_usd]), v_position_realisee[date] = d)
+		formatString: #,0.0,," M USD"
+		lineageTag: ba12cd0e-e97e-4e16-b784-80d6cb9dcc54
+
+	measure 'Écart au seuil USD' = [Position actuelle USD] - [Seuil actuel USD]
+		formatString: #,0.0,," M USD"
+		lineageTag: d7b727f0-292c-40f9-8828-27f1b97bc5c6
+
+	measure 'Position réalisée USD' = SUM(v_position_realisee[position_usd])
+		formatString: #,0.0,," M USD"
+		lineageTag: 87108cb3-ff6e-4f48-81b1-568375d581fd
+
+	measure 'Position projetée USD' = CALCULATE(SUM(v_position_projetee[position_projetee_usd]), v_position_projetee[modele_retenu] = 1)
+		formatString: #,0.0,," M USD"
+		lineageTag: 8840ef26-37bf-44a3-b0ad-acd1ab8e906c
+
+	measure 'Taux prévu' = IF(HASONEVALUE(dim_devise[code_devise]) && HASONEVALUE(fait_prevision_taux[modele]), AVERAGE(fait_prevision_taux[taux_prevu]))
+		formatString: 0.000000
+		lineageTag: 435322d7-c8e2-46a3-8ea1-a206e59f7c64
+
+	measure 'Borne basse taux' = IF(HASONEVALUE(dim_devise[code_devise]) && HASONEVALUE(fait_prevision_taux[modele]), AVERAGE(fait_prevision_taux[borne_basse]))
+		formatString: 0.000000
+		lineageTag: 9916d152-373c-4c54-bf99-6094e816bf77
+
+	measure 'Borne haute taux' = IF(HASONEVALUE(dim_devise[code_devise]) && HASONEVALUE(fait_prevision_taux[modele]), AVERAGE(fait_prevision_taux[borne_haute]))
+		formatString: 0.000000
+		lineageTag: f4c47bfb-426c-45f0-b9bb-856394fc35b0
+
+	measure 'Flux réel backtest' = IF(HASONEVALUE(dim_filiale[id_filiale]), AVERAGE(v_backtest[flux_reel]))
+		formatString: #,0.00
+		lineageTag: 7042fc97-8a1b-4999-b629-42deb28656c2
+
+	measure 'Flux prévu backtest' = IF(HASONEVALUE(dim_filiale[id_filiale]) && HASONEVALUE(v_backtest[modele]), AVERAGE(v_backtest[flux_prevu]))
+		formatString: #,0.00
+		lineageTag: f422504f-aa31-4ec4-8839-8421420ce272
+
+	measure 'Position base stress USD' = IF(HASONEVALUE(_Scenarios[libelle_scenario]), SUM(fait_scenario_stress[position_base_usd]))
+		formatString: #,0.0,," M USD"
+		lineageTag: 90cfe437-ab0f-443f-be18-2220a94678e9
+
+	measure 'Position stressée USD' = IF(HASONEVALUE(_Scenarios[libelle_scenario]), SUM(fait_scenario_stress[position_stressee_usd]))
+		formatString: #,0.0,," M USD"
+		lineageTag: b81f55ab-8d9b-4908-9289-174f125f0368
+
+	measure 'Couleur alerte' = IF([Écart au seuil USD] < 0, "#C62828", "#16856B")
+		formatString: 0
+		lineageTag: 45846879-5f4c-460d-be84-a5c4f9e0c9d1
+
+	column Masquer
+		dataType: int64
+		isHidden
+		lineageTag: e02e4e47-cdaf-491a-969b-2042dd012a4e
+		sourceColumn: Masquer
+
+	partition _Mesures = m
+		mode: import
+		source = #table(type table [Masquer=Int64.Type], {})
+

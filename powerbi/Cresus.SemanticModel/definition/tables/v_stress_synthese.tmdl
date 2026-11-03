@@ -1,0 +1,82 @@
+table v_stress_synthese
+	lineageTag: eb55ae72-0182-4443-be13-d74381e228c6
+
+	column libelle_scenario
+		dataType: string
+		lineageTag: f0b94597-6688-412e-a55e-9cdfc76df704
+		summarizeBy: none
+		sourceColumn: libelle_scenario
+
+	column type_choc
+		dataType: string
+		lineageTag: f83fe90a-3f57-42a1-99c2-e343e34de3bd
+		summarizeBy: none
+		sourceColumn: type_choc
+
+	column valeur_choc
+		dataType: double
+		lineageTag: 1ab82a90-7774-4e63-995d-f6fb9504c890
+		summarizeBy: none
+		sourceColumn: valeur_choc
+
+	column id_filiale
+		dataType: int64
+		lineageTag: 84d4ed5f-7395-49cf-96e0-24c58f01672f
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column nom_filiale
+		dataType: string
+		lineageTag: 2842f0e2-deba-4e4d-9f06-89ecf3c0e1ed
+		summarizeBy: none
+		sourceColumn: nom_filiale
+
+	column position_base_j30_usd
+		dataType: decimal
+		lineageTag: 091c2f68-d67b-487e-9bae-db28982e5768
+		summarizeBy: none
+		sourceColumn: position_base_j30_usd
+
+	column position_stressee_j30_usd
+		dataType: decimal
+		lineageTag: f970bc52-0a67-44b1-bc9e-a3690a5e7c85
+		summarizeBy: none
+		sourceColumn: position_stressee_j30_usd
+
+	column impact_usd
+		dataType: decimal
+		lineageTag: a8feb863-563c-4620-a260-04330dccf4b6
+		summarizeBy: none
+		sourceColumn: impact_usd
+
+	column position_min_usd
+		dataType: decimal
+		lineageTag: 71a23427-22b5-44f8-8203-16dced1d8cef
+		summarizeBy: none
+		sourceColumn: position_min_usd
+
+	column seuil_alerte_usd
+		dataType: decimal
+		lineageTag: e8dcaad8-2307-477f-8c92-f12793e5744f
+		summarizeBy: none
+		sourceColumn: seuil_alerte_usd
+
+	column nb_jours_sous_seuil
+		dataType: int64
+		lineageTag: 7a1f066b-d311-4a1f-a147-ac00a66bb792
+		summarizeBy: none
+		sourceColumn: nb_jours_sous_seuil
+
+	partition v_stress_synthese = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\v_stress_synthese.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `v_stress_synthese`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"libelle_scenario", type text}, {"type_choc", type text}, {"valeur_choc", type number}, {"id_filiale", Int64.Type}, {"nom_filiale", type text}, {"position_base_j30_usd", Currency.Type}, {"position_stressee_j30_usd", Currency.Type}, {"impact_usd", Currency.Type}, {"position_min_usd", Currency.Type}, {"seuil_alerte_usd", Currency.Type}, {"nb_jours_sous_seuil", Int64.Type}}, "en-US")
+				in
+				    Types
+

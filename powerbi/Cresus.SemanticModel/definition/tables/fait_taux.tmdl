@@ -1,0 +1,40 @@
+table fait_taux
+	lineageTag: cbf7f9c9-b472-4b47-9647-63c35b7ea507
+
+	column date_id
+		dataType: int64
+		lineageTag: 32d583df-128d-4e13-b8d2-ab4816e3edb9
+		summarizeBy: none
+		sourceColumn: date_id
+
+	column code_devise
+		dataType: string
+		lineageTag: 0529995d-f3e1-4aa6-87dc-8c4f68786671
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column taux_change_usd
+		dataType: double
+		lineageTag: a59a755d-4a9e-47e6-b7e1-e6885d97a877
+		summarizeBy: none
+		sourceColumn: taux_change_usd
+
+	column taux_directeur
+		dataType: double
+		lineageTag: a5eb2350-8e4c-4892-af2e-42d5c5cb5046
+		summarizeBy: none
+		sourceColumn: taux_directeur
+
+	partition fait_taux = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\fait_taux.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `fait_taux`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"date_id", Int64.Type}, {"code_devise", type text}, {"taux_change_usd", type number}, {"taux_directeur", type number}}, "en-US")
+				in
+				    Types
+

@@ -1,0 +1,87 @@
+table fait_scenario_stress
+	lineageTag: e3e6f172-c14b-45f8-9e20-e212fb7e50b6
+
+	column id_scenario
+		dataType: int64
+		lineageTag: deedfd46-f82c-45a3-aff6-ca523f39f32e
+		summarizeBy: none
+		sourceColumn: id_scenario
+
+	column libelle_scenario
+		dataType: string
+		lineageTag: 54199b98-41a0-45ae-ac70-6fd701259f93
+		summarizeBy: none
+		sourceColumn: libelle_scenario
+
+	column date_cible
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 302aa21b-0d5b-4a65-bd43-c7f7ca2998e7
+		summarizeBy: none
+		sourceColumn: date_cible
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column id_filiale
+		dataType: int64
+		lineageTag: a5d941d3-b931-4124-bcf5-5baa60431ffd
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column code_devise
+		dataType: string
+		lineageTag: f3ebd7ce-aec3-4bbe-913f-71a2fed2df6a
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column type_choc
+		dataType: string
+		lineageTag: 7414ad65-bcd8-461d-8a8c-72517f8593e8
+		summarizeBy: none
+		sourceColumn: type_choc
+
+	column valeur_choc
+		dataType: double
+		lineageTag: 23265ac2-ef1a-49ba-a4d7-318f4a7326e3
+		summarizeBy: none
+		sourceColumn: valeur_choc
+
+	column montant_base
+		dataType: decimal
+		lineageTag: aabb76e7-c7ae-451b-8e70-a58d479caee7
+		summarizeBy: none
+		sourceColumn: montant_base
+
+	column montant_stresse
+		dataType: decimal
+		lineageTag: 60bf3d7e-f973-44bd-8504-dd2df62ede8d
+		summarizeBy: none
+		sourceColumn: montant_stresse
+
+	column position_base_usd
+		dataType: decimal
+		lineageTag: 51a4c954-03a5-4cc6-9e6c-dcf5504e0437
+		summarizeBy: none
+		sourceColumn: position_base_usd
+
+	column position_stressee_usd
+		dataType: decimal
+		lineageTag: 923a4da2-a2b8-4a40-bcc2-2bbfc41f5ec9
+		summarizeBy: none
+		sourceColumn: position_stressee_usd
+
+	partition fait_scenario_stress = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\fait_scenario_stress.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `fait_scenario_stress`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_scenario", Int64.Type}, {"libelle_scenario", type text}, {"date_cible", type date}, {"id_filiale", Int64.Type}, {"code_devise", type text}, {"type_choc", type text}, {"valeur_choc", type number}, {"montant_base", Currency.Type}, {"montant_stresse", Currency.Type}, {"position_base_usd", Currency.Type}, {"position_stressee_usd", Currency.Type}}, "en-US")
+				in
+				    Types
+
+	annotation PBI_ResultType = Table
+

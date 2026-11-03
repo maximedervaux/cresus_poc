@@ -1,4 +1,4 @@
-"""Paramètres centraux du POC « Crésus » (périmètre défini au §2.1 du MOE)."""
+"""Paramètres centraux de la pipeline Cresus POC."""
 import os
 from datetime import date
 from pathlib import Path
@@ -15,10 +15,10 @@ DB_URL = f"{DB_SERVER_URL}/{DB_NAME}?charset=utf8mb4"
 # Fenêtre temporelle
 DATE_DEBUT = date(2024, 11, 1)        # début de l'historique
 DATE_FIN_HISTO = date(2026, 10, 31)   # dernier jour réalisé
-HORIZON_JOURS = 30                    # horizon de prévision (MOE §2.1)
+HORIZON_JOURS = 30                    # horizon de prévision (30 jours par défaut)
 DATE_FIN_CALENDRIER = date(2026, 12, 31)
 
-DEVISE_REPORTING = "USD"              # devise de consolidation (MOE §2.2.2)
+DEVISE_REPORTING = "USD"              # devise de consolidation
 PARITE_EUR_XAF = 655.957              # parité fixe franc CFA / euro
 
 DEVISES = {
@@ -28,7 +28,7 @@ DEVISES = {
     "USD": "DOLLAR AMERICAIN",
 }
 
-# seuil_alerte : position minimale (devise locale) sous laquelle la devise est « à faible stock »
+# seuil_alerte : position minimale (devise locale) sous laquelle la devise est à faible stock
 FILIALES = [
     {"id_filiale": 1, "nom_filiale": "ZF_BANQUE_FRANCE", "pays": "FRA", "iso2": "FR",
      "zone_geo": "EUROPE", "devise_principale": "EUR", "seuil_alerte": 200e6},

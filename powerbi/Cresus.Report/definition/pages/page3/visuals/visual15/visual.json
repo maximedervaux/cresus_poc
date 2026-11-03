@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "visual15",
+  "position": {
+    "x": 24,
+    "y": 125,
+    "z": 15,
+    "height": 350,
+    "width": 1226,
+    "tabOrder": 15
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_calendrier"
+                    }
+                  },
+                  "Property": "date"
+                }
+              },
+              "queryRef": "dim_calendrier.date",
+              "nativeQueryRef": "date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Flux réel backtest"
+                }
+              },
+              "queryRef": "_Mesures.Flux réel backtest",
+              "nativeQueryRef": "Flux réel backtest"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Flux prévu backtest"
+                }
+              },
+              "queryRef": "_Mesures.Flux prévu backtest",
+              "nativeQueryRef": "Flux prévu backtest"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Backtest en devise locale — sélectionner une filiale et un modèle'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

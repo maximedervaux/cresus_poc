@@ -1,4 +1,4 @@
-"""Moteur prédictif (MOE §2.1.2 / §2.2.4) : Prophet et ARIMA à 30 jours.
+"""Moteur prédictif : Prophet et ARIMA à 30 jours.
 
 1. BACKTEST   : modèles entraînés jusqu'à J-30, comparés au réalisé des 30 derniers jours
                et à la prévision manuelle actuelle des trésoriers (référence « MANUEL »).
@@ -32,6 +32,7 @@ NIVEAU_CONFIANCE = 0.80
 
 
 def features_calendaires(cal, pays):
+    """Variables explicatives pour la prévision des flux nets par filiale."""
     ouvre = cal[f"ouvre_{pays.lower()}"].astype(bool)
     ev = evenements_calendaires(cal.date[ouvre])
     X = pd.DataFrame({"ds": cal.date})
@@ -45,6 +46,10 @@ def features_calendaires(cal, pays):
 
 
 def prevoir_prophet(train, futur, regresseurs):
+    """Prévision à 30 jours avec Prophet (Facebook) : modèle additif avec saisonnalité hebdomadaire.
+    Les flux sont centrés et mis à l'échelle pour améliorer la convergence de l'optimisation.
+    Les intervalles de confiance sont calculés par simulation Monte-Carlo (paramètre interval_width).
+    """
     echelle = train.y.abs().mean()
     m = Prophet(interval_width=NIVEAU_CONFIANCE, yearly_seasonality=False,
                 weekly_seasonality=not regresseurs, daily_seasonality=False)
@@ -57,6 +62,10 @@ def prevoir_prophet(train, futur, regresseurs):
 
 
 def prevoir_arima(train, futur, regresseurs, ordre=(1, 0, 1)):
+    """Prévision à 30 jours avec ARIMA (statsmodels) : modèle autorégressif avec moyenne mobile.
+    Les flux sont centrés et mis à l'échelle pour améliorer la convergence de l'optimisation.
+    Les intervalles de confiance sont calculés par simulation Monte-Carlo (paramètre alpha).
+    """
     echelle = train.y.abs().mean()
     exog = train[regresseurs].to_numpy() if regresseurs else None
     modele = SARIMAX(train.y.to_numpy() / echelle, exog=exog, order=ordre,
@@ -68,6 +77,7 @@ def prevoir_arima(train, futur, regresseurs, ordre=(1, 0, 1)):
 
 
 def evaluer(reel, prevu):
+    """Évalue la performance d'une prévision par rapport au réalisé : MAE, WAPE et écart de position."""
     erreur = prevu - reel
     return {"nb_jours": len(reel), "mae": np.abs(erreur).mean(),
             "wape_pct": 100 * np.abs(erreur).sum() / np.abs(reel).sum(),
@@ -75,6 +85,7 @@ def evaluer(reel, prevu):
 
 
 def charger(engine):
+    """Charge les tables de référence et les flux réalisés depuis la base de données."""
     cal = pd.read_sql("SELECT * FROM dim_calendrier ORDER BY date", engine, parse_dates=["date"])
     filiales = pd.read_sql("SELECT * FROM dim_filiale", engine)
     flux = pd.read_sql("""
@@ -93,6 +104,9 @@ def charger(engine):
 
 
 def prevoir_flux(cal, filiales, flux):
+    """Prévision à 30 jours des flux nets par filiale avec Prophet et ARIMA.
+    Retourne les prévisions et les performances des modèles sur le backtest.
+    """
     modeles = {"PROPHET": prevoir_prophet, "ARIMA": prevoir_arima}
     previsions, perfs = [], []
     for fil in filiales.itertuples():
@@ -131,6 +145,9 @@ def prevoir_flux(cal, filiales, flux):
 
 
 def prevoir_taux(taux):
+    """Prévision à 30 jours du cours de chaque devise contre USD avec Prophet et ARIMA.
+    Retourne les prévisions et les intervalles de confiance.
+    """
     futur = pd.DataFrame({"ds": pd.date_range(FIN_HISTO + pd.Timedelta(days=1), periods=HORIZON_JOURS)})
     sorties = []
     for devise, g in taux.groupby("code_devise"):
@@ -143,6 +160,7 @@ def prevoir_taux(taux):
 
 
 def main():
+    """Exécute la prévision des flux nets par filiale et des taux de change contre USD."""
     engine = get_engine()
     cal, filiales, flux, taux = charger(engine)
     previsions, perfs = prevoir_flux(cal, filiales, flux)

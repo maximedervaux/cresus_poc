@@ -1,0 +1,20 @@
+expression ServeurMySQL = "localhost:3306" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 7e654c79-c13d-4442-bd7e-e8f63f68d449
+
+	annotation PBI_ResultType = Text
+
+expression BaseMySQL = "cresus_poc" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 272cb092-3f9d-4fca-8167-df259e49af66
+
+	annotation PBI_ResultType = Text
+
+expression ModeSource = "MySQL" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 1e99552f-095f-4f05-84de-3670e73f1954
+
+	annotation PBI_ResultType = Text
+
+expression DossierExports = "C:\\Projet_BI\\cresus_poc\\exports" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3f9ab6c1-dfe0-47e2-8794-4875244ec8f6
+
+	annotation PBI_ResultType = Text
+

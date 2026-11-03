@@ -1,0 +1,64 @@
+table fait_flux_tresorerie
+	lineageTag: 17869243-6164-46fd-bc92-49083f171491
+
+	column id_flux
+		dataType: int64
+		lineageTag: be3d9bfc-6613-4a23-9b72-a2bc815738dc
+		summarizeBy: none
+		sourceColumn: id_flux
+
+	column date_id
+		dataType: int64
+		lineageTag: 6c272259-36d0-4c11-ba32-2b94dab85d6a
+		summarizeBy: none
+		sourceColumn: date_id
+
+	column id_filiale
+		dataType: int64
+		lineageTag: d4f23c6f-db84-4855-94b6-2a729f8757f1
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column code_devise
+		dataType: string
+		lineageTag: e99684b2-5c17-48d3-99f1-34e648d73491
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column id_type_flux
+		dataType: int64
+		lineageTag: fc11338c-bb71-4a96-b0b9-4bbaf4dee064
+		summarizeBy: none
+		sourceColumn: id_type_flux
+
+	column montant
+		dataType: decimal
+		lineageTag: 397b335e-75de-41fb-a499-12e9909b2788
+		summarizeBy: none
+		sourceColumn: montant
+
+	column montant_usd
+		dataType: decimal
+		lineageTag: b55343ce-2751-4101-a96a-4b6cad963478
+		summarizeBy: none
+		sourceColumn: montant_usd
+
+	column statut
+		dataType: string
+		lineageTag: 51aa6102-6cb9-4199-82c6-b4e145124b08
+		summarizeBy: none
+		sourceColumn: statut
+
+	partition fait_flux_tresorerie = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\fait_flux_tresorerie.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `fait_flux_tresorerie`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_flux", Int64.Type}, {"date_id", Int64.Type}, {"id_filiale", Int64.Type}, {"code_devise", type text}, {"id_type_flux", Int64.Type}, {"montant", Currency.Type}, {"montant_usd", Currency.Type}, {"statut", type text}}, "en-US")
+				in
+				    Types
+

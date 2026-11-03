@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "visual21",
+  "position": {
+    "x": 24,
+    "y": 510,
+    "width": 1226,
+    "height": 330,
+    "z": 21,
+    "tabOrder": 21
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "libelle_scenario"
+                }
+              },
+              "queryRef": "v_stress_synthese.libelle_scenario",
+              "nativeQueryRef": "libelle_scenario"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "nom_filiale"
+                }
+              },
+              "queryRef": "v_stress_synthese.nom_filiale",
+              "nativeQueryRef": "nom_filiale"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "position_base_j30_usd"
+                }
+              },
+              "queryRef": "v_stress_synthese.position_base_j30_usd",
+              "nativeQueryRef": "position_base_j30_usd"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "position_stressee_j30_usd"
+                }
+              },
+              "queryRef": "v_stress_synthese.position_stressee_j30_usd",
+              "nativeQueryRef": "position_stressee_j30_usd"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "impact_usd"
+                }
+              },
+              "queryRef": "v_stress_synthese.impact_usd",
+              "nativeQueryRef": "impact_usd"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_stress_synthese"
+                    }
+                  },
+                  "Property": "nb_jours_sous_seuil"
+                }
+              },
+              "queryRef": "v_stress_synthese.nb_jours_sous_seuil",
+              "nativeQueryRef": "nb_jours_sous_seuil"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Stress par filiale et scénario'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

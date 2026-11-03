@@ -1,0 +1,97 @@
+table v_position_projetee
+	lineageTag: 7fbda3c1-6b66-4c98-827a-40ca22b01959
+
+	column id_filiale
+		dataType: int64
+		lineageTag: 6731f2c3-0a9a-447b-afa7-9f4e57069876
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column nom_filiale
+		dataType: string
+		lineageTag: c35504f1-f28e-4d64-8041-9bc652fb1713
+		summarizeBy: none
+		sourceColumn: nom_filiale
+
+	column code_devise
+		dataType: string
+		lineageTag: 46f04bda-cda4-4510-aadc-e743236a4d90
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: aa2d0703-e755-4db9-9448-94eb05eae887
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column modele
+		dataType: string
+		lineageTag: e9fdb561-80d5-42b1-b26a-120b7505ab39
+		summarizeBy: none
+		sourceColumn: modele
+
+	column modele_retenu
+		dataType: int64
+		lineageTag: 5f3bcd91-26f6-4258-9659-5fa797f40eb6
+		summarizeBy: none
+		sourceColumn: modele_retenu
+
+	column flux_net
+		dataType: decimal
+		lineageTag: 6e2e4d6a-a058-467d-a708-2496e9607485
+		summarizeBy: none
+		sourceColumn: flux_net
+
+	column borne_basse
+		dataType: decimal
+		lineageTag: e5b882c8-69fe-496a-9bc3-b3f1cca0c489
+		summarizeBy: none
+		sourceColumn: borne_basse
+
+	column borne_haute
+		dataType: decimal
+		lineageTag: ae8e7e58-fe2d-42f2-a0ea-017472a8e70b
+		summarizeBy: none
+		sourceColumn: borne_haute
+
+	column position_projetee
+		dataType: decimal
+		lineageTag: 0f53fc94-5188-440a-a4bd-f2da4312f145
+		summarizeBy: none
+		sourceColumn: position_projetee
+
+	column position_projetee_usd
+		dataType: decimal
+		lineageTag: 0ca3629a-375a-4f54-b90a-7479e75f1c30
+		summarizeBy: none
+		sourceColumn: position_projetee_usd
+
+	column seuil_alerte
+		dataType: decimal
+		lineageTag: a4e0a589-a89f-40cf-811e-da3f2069ab92
+		summarizeBy: none
+		sourceColumn: seuil_alerte
+
+	column statut_liquidite
+		dataType: string
+		lineageTag: d256462b-8864-4e4d-a5db-1efd31565b24
+		summarizeBy: none
+		sourceColumn: statut_liquidite
+
+	partition v_position_projetee = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\v_position_projetee.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `v_position_projetee`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_filiale", Int64.Type}, {"nom_filiale", type text}, {"code_devise", type text}, {"date", type date}, {"modele", type text}, {"modele_retenu", Int64.Type}, {"flux_net", Currency.Type}, {"borne_basse", Currency.Type}, {"borne_haute", Currency.Type}, {"position_projetee", Currency.Type}, {"position_projetee_usd", Currency.Type}, {"seuil_alerte", Currency.Type}, {"statut_liquidite", type text}}, "en-US")
+				in
+				    Types
+

@@ -1,0 +1,52 @@
+table dim_filiale
+	lineageTag: 489d0cb9-a54b-49fe-91d5-757321ce5327
+
+	column id_filiale
+		dataType: int64
+		lineageTag: 63f2dbb1-ad2d-4f3c-97ee-5a38f801f0aa
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column nom_filiale
+		dataType: string
+		lineageTag: f3934d69-dde1-44dc-b47e-cccc392b890a
+		summarizeBy: none
+		sourceColumn: nom_filiale
+
+	column pays
+		dataType: string
+		lineageTag: ce64130d-58d5-46eb-9de5-1cec7206425a
+		summarizeBy: none
+		sourceColumn: pays
+
+	column zone_geo
+		dataType: string
+		lineageTag: 5e7d753e-692a-4a9f-8074-d0334ce75b6a
+		summarizeBy: none
+		sourceColumn: zone_geo
+
+	column devise_principale
+		dataType: string
+		lineageTag: 6e497515-d162-4f3a-928c-9640beedc2f3
+		summarizeBy: none
+		sourceColumn: devise_principale
+
+	column seuil_alerte
+		dataType: decimal
+		lineageTag: 8b15ffe1-afbf-40c4-9983-d965838d5881
+		summarizeBy: none
+		sourceColumn: seuil_alerte
+
+	partition dim_filiale = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\dim_filiale.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `dim_filiale`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_filiale", Int64.Type}, {"nom_filiale", type text}, {"pays", type text}, {"zone_geo", type text}, {"devise_principale", type text}, {"seuil_alerte", Currency.Type}}, "en-US")
+				in
+				    Types
+

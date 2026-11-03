@@ -1,0 +1,79 @@
+table v_position_realisee
+	lineageTag: 72e1199b-aa4b-40c1-9ce8-79585118f788
+
+	column id_filiale
+		dataType: int64
+		lineageTag: d8e276b2-8d56-4caa-8583-9c897eaeba33
+		summarizeBy: none
+		sourceColumn: id_filiale
+
+	column nom_filiale
+		dataType: string
+		lineageTag: 5be5ea6f-3a5b-4c4b-9abc-e3e1c2d5adf2
+		summarizeBy: none
+		sourceColumn: nom_filiale
+
+	column code_devise
+		dataType: string
+		lineageTag: 2ad5a0a4-6d1f-47c2-bfec-5e53c7ccc5cf
+		summarizeBy: none
+		sourceColumn: code_devise
+
+	column date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: d3c9580f-3793-4621-9a07-adb21c65aa6f
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column flux_net
+		dataType: decimal
+		lineageTag: 629e7f54-90f9-4abe-829e-a42125d022d5
+		summarizeBy: none
+		sourceColumn: flux_net
+
+	column position
+		dataType: decimal
+		lineageTag: 4cff68f2-3624-45a5-9b47-75a73227def5
+		summarizeBy: none
+		sourceColumn: position
+
+	column position_usd
+		dataType: decimal
+		lineageTag: 03c957d7-230b-4470-8e57-326856d99542
+		summarizeBy: none
+		sourceColumn: position_usd
+
+	column seuil_alerte
+		dataType: decimal
+		lineageTag: beb13c1b-344c-4387-9f65-a820c002ee70
+		summarizeBy: none
+		sourceColumn: seuil_alerte
+
+	column seuil_alerte_usd
+		dataType: decimal
+		lineageTag: 3fc52443-7f7d-49a4-9bff-747b004b052d
+		summarizeBy: none
+		sourceColumn: seuil_alerte_usd
+
+	column statut_liquidite
+		dataType: string
+		lineageTag: ad48032e-cc16-40c5-82fc-787b635b34cb
+		summarizeBy: none
+		sourceColumn: statut_liquidite
+
+	partition v_position_realisee = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\v_position_realisee.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `v_position_realisee`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_filiale", Int64.Type}, {"nom_filiale", type text}, {"code_devise", type text}, {"date", type date}, {"flux_net", Currency.Type}, {"position", Currency.Type}, {"position_usd", Currency.Type}, {"seuil_alerte", Currency.Type}, {"seuil_alerte_usd", Currency.Type}, {"statut_liquidite", type text}}, "en-US")
+				in
+				    Types
+

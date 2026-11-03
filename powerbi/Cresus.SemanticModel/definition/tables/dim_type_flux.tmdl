@@ -1,0 +1,34 @@
+table dim_type_flux
+	lineageTag: 76eca32e-3d84-49a6-8b81-5f1f1c03e220
+
+	column id_type_flux
+		dataType: int64
+		lineageTag: 01212dbd-afd4-401a-95a4-628a4ef52505
+		summarizeBy: none
+		sourceColumn: id_type_flux
+
+	column libelle
+		dataType: string
+		lineageTag: aa12ec28-3dc8-450e-972f-23c49b1cfc28
+		summarizeBy: none
+		sourceColumn: libelle
+
+	column sens
+		dataType: string
+		lineageTag: c78d34d1-a40a-435b-a551-667dabd0e6f3
+		summarizeBy: none
+		sourceColumn: sens
+
+	partition dim_type_flux = m
+		mode: import
+		source =
+				let
+				    Source = if ModeSource = "CSV" then
+				        Table.PromoteHeaders(Csv.Document(File.Contents(DossierExports & "\dim_type_flux.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]), [PromoteAllScalars=true])
+				    else if ModeSource = "MySQL" then
+				        MySQL.Database(ServeurMySQL, BaseMySQL, [ReturnSingleDatabase=true, CreateNavigationProperties=false, Query="SELECT * FROM `dim_type_flux`"])
+				    else error "ModeSource doit valoir MySQL ou CSV",
+				    Types = Table.TransformColumnTypes(Source, {{"id_type_flux", Int64.Type}, {"libelle", type text}, {"sens", type text}}, "en-US")
+				in
+				    Types
+

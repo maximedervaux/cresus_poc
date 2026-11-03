@@ -1,0 +1,301 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "visual11",
+  "position": {
+    "x": 24,
+    "y": 510,
+    "z": 11,
+    "height": 330,
+    "width": 1226,
+    "tabOrder": 11
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "code_devise"
+                }
+              },
+              "queryRef": "v_projection_taux.code_devise",
+              "nativeQueryRef": "code_devise"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "libelle_devise"
+                }
+              },
+              "queryRef": "v_projection_taux.libelle_devise",
+              "nativeQueryRef": "libelle_devise"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "modele"
+                }
+              },
+              "queryRef": "v_projection_taux.modele",
+              "nativeQueryRef": "modele"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "taux_spot"
+                }
+              },
+              "queryRef": "v_projection_taux.taux_spot",
+              "nativeQueryRef": "taux_spot"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "taux_prevu_j30"
+                }
+              },
+              "queryRef": "v_projection_taux.taux_prevu_j30",
+              "nativeQueryRef": "taux_prevu_j30"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "borne_basse"
+                }
+              },
+              "queryRef": "v_projection_taux.borne_basse",
+              "nativeQueryRef": "borne_basse"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "borne_haute"
+                }
+              },
+              "queryRef": "v_projection_taux.borne_haute",
+              "nativeQueryRef": "borne_haute"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "variation_pct"
+                }
+              },
+              "queryRef": "v_projection_taux.variation_pct",
+              "nativeQueryRef": "variation_pct"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "v_projection_taux"
+                    }
+                  },
+                  "Property": "indicateur"
+                }
+              },
+              "queryRef": "v_projection_taux.indicateur",
+              "nativeQueryRef": "indicateur"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Signal de change à J+30'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "7dfa277b0d7aedc5ac01",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "code_devise"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "97dfa4aee03d898958e2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "libelle_devise"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2ee34c1b7dce404d2a61",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "modele"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2c42cb644d6c742b9847",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "taux_spot"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "9139ab8555b9134640b7",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "taux_prevu_j30"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "bba351ae468954ab7dd4",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "borne_basse"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "caaf73ab248ca4bae6ed",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "borne_haute"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "767a7b491641827bb610",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "variation_pct"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "2a5f28fc9093a8bb6ae4",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "v_projection_taux"
+              }
+            },
+            "Property": "indicateur"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

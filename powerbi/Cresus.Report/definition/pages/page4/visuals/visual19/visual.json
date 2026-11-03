@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "visual19",
+  "position": {
+    "x": 24,
+    "y": 130,
+    "z": 19,
+    "height": 350,
+    "width": 780,
+    "tabOrder": 19
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_calendrier"
+                    }
+                  },
+                  "Property": "date"
+                }
+              },
+              "queryRef": "dim_calendrier.date",
+              "nativeQueryRef": "date",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Position base stress USD"
+                }
+              },
+              "queryRef": "_Mesures.Position base stress USD",
+              "nativeQueryRef": "Position base stress USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Mesures"
+                    }
+                  },
+                  "Property": "Position stressée USD"
+                }
+              },
+              "queryRef": "_Mesures.Position stressée USD",
+              "nativeQueryRef": "Position stressée USD"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sélectionner un scénario — positions en USD'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
