@@ -1,10 +1,12 @@
 """Référentiel des types de flux et tables de correspondance par filiale.
 
 Chaque système source utilise ses propres libellés : ces tables constituent le
-mapping « source -> référentiel Groupe » appliqué par l'ETL (MOE §2.7).
+mapping "source -> référentiel Groupe" appliqué par l'ETL.
 """
 
 # Référentiel Groupe : code -> sens
+# ENCAISSEMENT : flux entrants (positifs pour la banque)
+# DECAISSEMENT : flux sortants (négatifs pour la banque)
 TYPES_FLUX = {
     "REPORT_A_NOUVEAU": "ENCAISSEMENT",       # solde d'ouverture
     "DEPOTS_CLIENTS": "ENCAISSEMENT",

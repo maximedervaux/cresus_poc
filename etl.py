@@ -1,4 +1,4 @@
-"""ETL Crésus (MOE §2.2.2) : sources hétérogènes -> staging -> modèle en étoile.
+"""ETL Crésus : sources hétérogènes -> staging -> modèle en étoile.
 
 Étapes : chargement brut (stg_*), dédoublonnage, filtrage des lignes non pertinentes,
 standardisation (dates, montants, séparateurs, libellés), contrôle de cohérence,
@@ -37,11 +37,13 @@ class Controle:
 
 # ------------------------------- EXTRACT ---------------------------------
 def extraire():
+    """Lit les fichiers sources et retourne un dictionnaire table -> DataFrame."""
     return {table: pd.read_csv(SOURCES_DIR / fichier, dtype=str, keep_default_na=False, **opts)
             for table, (fichier, opts) in SOURCES.items()}
 
 
 def charger_staging(engine, brut):
+    """Charge les tables staging (stg_*) avec horodatage de chargement."""
     horodatage = pd.Timestamp.now().floor("s")
     for table, df in brut.items():
         df.assign(date_chargement=horodatage).to_sql(table, engine, if_exists="replace", index=False)
@@ -113,6 +115,7 @@ def transformer_ci(brut):
 
 
 def construire_calendrier(feries):
+    """Calendrier des jours ouvrés pour chaque filiale."""
     feries = feries.assign(date=pd.to_datetime(feries.date))
     jours = pd.DataFrame({"date": pd.date_range(DATE_DEBUT, DATE_FIN_CALENDRIER, freq="D")})
     jours["date"] = jours.date.astype("datetime64[ns]")

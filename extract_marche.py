@@ -1,8 +1,7 @@
 """Sources externes : taux de change (API BCE via Frankfurter) et taux directeurs.
 
 Produit taux_change.csv (EUR/CAD, EUR/XAF), valeur_usd.csv (EUR/USD) et
-taux_directeurs.csv, conformément au §2.3 du MOE. Récupération en différé
-(batch quotidien), pas en temps réel (MOE §2.1.5).
+taux_directeurs.csv. Récupération en différé (batch quotidien), pas en temps réel.
 """
 import pandas as pd
 import requests

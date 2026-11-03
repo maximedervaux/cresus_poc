@@ -1,13 +1,13 @@
 """Sources internes simulées : extractions des systèmes de trésorerie des 3 filiales.
 
-Chaque filiale a volontairement son propre format (MOE §2.3) :
+Chaque filiale a volontairement son propre format :
   - FR : séparateur « ; », décimale « , », date JJ/MM/AAAA, encodage Windows-1252, libellés FR
   - CA : séparateur « , », date MM/JJ/AAAA, libellés EN, décaissements en montants négatifs
   - CI : séparateur « | », date AAAAMMJJ, codes courts, sens C/D, milliers séparés par espace
 et contient des défauts de qualité (doublons, montants vides, lignes non pertinentes)
 que l'ETL doit traiter.
 
-Les lignes « prévisionnelles » simulent la prévision manuelle actuelle des trésoriers
+Les lignes prévisionnelles simulent la prévision manuelle actuelle des trésoriers
 (méthode tableur) : elles servent de référence pour mesurer le gain des modèles.
 """
 import holidays
@@ -30,14 +30,14 @@ FIN_HISTO = pd.Timestamp(DATE_FIN_HISTO)
 # Prévisions manuelles : une pour le backtest (octobre), une pour l'horizon de production
 DATES_PREVISION_MANUELLE = [FIN_HISTO - pd.Timedelta(days=HORIZON_JOURS), FIN_HISTO]
 
-
+# Jours fériés par filiale (pour générer les flux récurrents sur les jours ouvrés)
 def jours_ouvres(iso2):
     feries = holidays.country_holidays(iso2, years=range(DATE_DEBUT.year, DATE_FIN_CALENDRIER.year + 1))
     jours = pd.date_range(DATE_DEBUT, DATE_FIN_CALENDRIER, freq="D")
     return [d for d in jours if d.weekday() < 5 and d.date() not in feries]
 
-
 def generer_realise(profil, ouvres, ev):
+    """Flux réalisés simulés : montants journaliers avec bruit log-normal, croissance de 10 % sur la période."""
     e = profil["echelle"]
     ouvres = [d for d in ouvres if d <= FIN_HISTO]
     lignes = [(pd.Timestamp(DATE_DEBUT), "REPORT_A_NOUVEAU", profil["ouverture"])]
@@ -63,7 +63,6 @@ def generer_realise(profil, ouvres, ev):
             ajouter("IMPOTS", e * 1.5)
     return pd.DataFrame(lignes, columns=["date", "type_flux", "montant"]).assign(statut="REALISE")
 
-
 def generer_prevision_manuelle(realise, date_generation, ouvres, ev):
     """Méthode tableur : moyenne par jour ouvré sur 3 mois pour les flux récurrents,
     dernier montant connu pour la paie et les impôts placés à leur date."""
@@ -83,7 +82,6 @@ def generer_prevision_manuelle(realise, date_generation, ouvres, ev):
             lignes += [(d, type_flux, moyenne) for d in cibles]
     return pd.DataFrame(lignes, columns=["date", "type_flux", "montant"]).assign(statut="PREVISIONNEL")
 
-
 def degrader(df, col_montant, rendre_non_pertinent):
     """Injecte doublons, montants manquants et lignes non pertinentes."""
     df = df.copy()
@@ -92,8 +90,8 @@ def degrader(df, col_montant, rendre_non_pertinent):
     parasites = rendre_non_pertinent(df.sample(frac=0.003, random_state=2).copy())
     return pd.concat([df, doublons, parasites]).sort_index(kind="stable")
 
-
 def ecrire_fr(df, chemin):
+    """Écrit le flux de la filiale française dans le format attendu par l'ETL."""
     out = pd.DataFrame({
         "Date_Operation": df.date.dt.strftime("%d/%m/%Y"),
         "Libelle": df.type_flux.map(LIB_FR),
@@ -104,8 +102,8 @@ def ecrire_fr(df, chemin):
     out = degrader(out, "Montant", lambda p: p.assign(Statut="Annulé"))
     out.to_csv(chemin, sep=";", index=False, encoding="cp1252")
 
-
 def ecrire_ca(df, chemin):
+    """Écrit le flux de la filiale canadienne dans le format attendu par l'ETL."""
     signe = np.where(df.type_flux.map(TYPES_FLUX) == "DECAISSEMENT", -1, 1)
     out = pd.DataFrame({
         "txn_date": df.date.dt.strftime("%m/%d/%Y"),
@@ -119,8 +117,8 @@ def ecrire_ca(df, chemin):
     out = degrader(out, "amount", lambda p: p.assign(category="Internal transfer"))
     out.to_csv(chemin, sep=",", index=False)
 
-
 def ecrire_ci(df, chemin):
+    """Écrit le flux de la filiale ivoirienne dans le format attendu par l'ETL."""
     out = pd.DataFrame({
         "DATE_VALEUR": df.date.dt.strftime("%Y%m%d"),
         "NATURE_FLUX": df.type_flux.map(CODE_CI),
@@ -134,8 +132,8 @@ def ecrire_ci(df, chemin):
 
 ECRIVAINS = {"FR": ecrire_fr, "CA": ecrire_ca, "CI": ecrire_ci}
 
-
 def main():
+    """Génère les fichiers sources simulés pour les 3 filiales."""
     SOURCES_DIR.mkdir(parents=True, exist_ok=True)
     feries = []
     for filiale in FILIALES:
