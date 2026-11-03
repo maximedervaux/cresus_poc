@@ -1,0 +1,15 @@
+date_effet,code_devise,banque_centrale,taux_pct
+2024-10-23,EUR,BCE (facilité de dépôt),3.25
+2024-12-18,EUR,BCE (facilité de dépôt),3.0
+2025-02-05,EUR,BCE (facilité de dépôt),2.75
+2025-03-12,EUR,BCE (facilité de dépôt),2.5
+2025-04-23,EUR,BCE (facilité de dépôt),2.25
+2025-06-11,EUR,BCE (facilité de dépôt),2.0
+2024-10-23,CAD,Banque du Canada,3.75
+2024-12-11,CAD,Banque du Canada,3.25
+2025-01-29,CAD,Banque du Canada,3.0
+2025-03-12,CAD,Banque du Canada,2.75
+2025-09-17,CAD,Banque du Canada,2.5
+2025-10-29,CAD,Banque du Canada,2.25
+2023-03-27,XAF,BEAC (TIAO),5.0
+2025-03-24,XAF,BEAC (TIAO),4.5
